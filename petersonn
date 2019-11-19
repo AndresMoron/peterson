@@ -1,0 +1,41 @@
+moduleExclusion_Mutua_P;
+var flag1,flag2: boolean;
+turno: integer;
+procedure bloqueo(var mi_flag, su_flag: boolean; su_turno:integer);
+begin
+mi_flag := true;
+turno := su_turno;
+while su_flag and (turno = su_turno) do ; end
+end bloqueo;
+procedure desbloqueo(var mi_flag: boolean);
+begin mi_flag := false;
+end desbloqueo;
+
+process P1
+begin
+loop
+bloqueo(flag1,flag2,2);
+(* Uso del recurso Sección Crítica *)
+desbloqueo(flag1);
+(* resto del proceso *)
+end
+
+end P1;
+
+process P2
+begin
+loop
+bloqueo(flag2,flag1,1);
+(* Uso del recurso Sección Crítica *)
+desbloqueo(flag2);
+(* resto del proceso *)
+end
+end P2;
+begin (* Exclusion_Mutua_P*)
+flag1 := FALSE;
+flag2 := FALSE;
+cobegin
+P1;
+P2;
+coend
+end Exclusion_Mutua_P.
